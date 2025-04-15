@@ -94,8 +94,8 @@ class RankingModel:
 
 
 def evaluate(instances, model):
-    correct = 0
-    total = len(instances) * 2
+    correct_pairs = 0
+    total_pairs = len(instances)
 
     for inst in instances:
         q1, q2 = inst["q1"], inst["q2"]
@@ -104,12 +104,12 @@ def evaluate(instances, model):
         s1_d1, s1_d2 = model.rank_documents(q1, d1, d2)
         s2_d1, s2_d2 = model.rank_documents(q2, d1, d2)
 
-        if s1_d1 > s1_d2:
-            correct += 1
-        if s2_d2 > s2_d1:
-            correct += 1
+        # q1 should prefer d1, q2 should prefer d2 (reverse ranking)
+        if s1_d1 > s1_d2 and s2_d2 > s2_d1:
+            correct_pairs += 1
 
-    return (correct / total) * 100
+    return (correct_pairs / total_pairs) * 100
+
 
 
 def main():
