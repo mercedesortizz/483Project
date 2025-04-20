@@ -71,7 +71,7 @@ def extract_features(query, doc, vectorizer=None):
 
 class RankingModel:
     def __init__(self):
-        self.model = XGBClassifier(use_label_encoder=False, eval_metric='logloss')
+        self.model = XGBClassifier(eval_metric='logloss')
         self.vectorizer = None
         self.trained = False
 
@@ -79,12 +79,7 @@ class RankingModel:
         texts = []
         for inst in instances:
             texts.extend([inst["q1"], inst["q2"], inst["doc1"], inst["doc2"]])
-        vectorizer = TfidfVectorizer(
-            ngram_range=(1, 2),
-            max_df=0.9,
-            min_df=2,
-            stop_words="english"
-        )
+        vectorizer = TfidfVectorizer(ngram_range=(1, 2), max_df=0.9, min_df=2, stop_words="english")
         vectorizer.fit(texts)
         return vectorizer
 
@@ -93,10 +88,14 @@ class RankingModel:
         x, y = [], []
 
         for inst in instances:
-            x.append(extract_features(inst["q1"], inst["doc1"], self.vectorizer)); y.append(1)
-            x.append(extract_features(inst["q1"], inst["doc2"], self.vectorizer)); y.append(0)
-            x.append(extract_features(inst["q2"], inst["doc1"], self.vectorizer)); y.append(0)
-            x.append(extract_features(inst["q2"], inst["doc2"], self.vectorizer)); y.append(1)
+            x.append(extract_features(inst["q1"], inst["doc1"], self.vectorizer)) 
+            y.append(1)
+            x.append(extract_features(inst["q1"], inst["doc2"], self.vectorizer))
+            y.append(0)
+            x.append(extract_features(inst["q2"], inst["doc1"], self.vectorizer))
+            y.append(0)
+            x.append(extract_features(inst["q2"], inst["doc2"], self.vectorizer))
+            y.append(1)
 
         self.model.fit(np.array(x), np.array(y))
         self.trained = True
@@ -127,6 +126,7 @@ def main():
     train_set = list(dataset["train"])
     val_set = list(dataset["validation"])
     test_set = list(dataset["test"])
+
     print(f"Loaded {len(train_set)} train, {len(val_set)} val, {len(test_set)} test instances.\n")
 
     model = RankingModel()
