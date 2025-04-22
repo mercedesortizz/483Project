@@ -115,7 +115,8 @@ def evaluate(instances, model):
         d1, d2 = inst["doc1"], inst["doc2"]
         s1_d1, s1_d2 = model.rank_documents(q1, d1, d2)
         s2_d1, s2_d2 = model.rank_documents(q2, d1, d2)
-        if s1_d1 > s1_d2 and s2_d2 > s2_d1:
+        # QUESTION FOR BLANCO, might have to remove the Or
+        if (s1_d1 > s1_d2 and s2_d2 > s2_d1) or (s1_d2 > s1_d1 and s2_d1 > s2_d2):
             correct_pairs += 1
     return (correct_pairs / len(instances)) * 100
 
