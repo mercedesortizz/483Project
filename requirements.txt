@@ -1,10 +1,6 @@
 datasets
 scikit-learn
-spacy
-sentencepiece
-numpy
-nltk
 xgboost
-transformers
-torch
-protobuf
+numpy
+sentence-transformers
+spacy
