@@ -4,3 +4,7 @@ spacy
 sentencepiece
 numpy
 nltk
+xgboost
+transformers
+torch
+protobuf
