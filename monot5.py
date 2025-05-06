@@ -7,8 +7,6 @@ Original file is located at
     https://colab.research.google.com/drive/1RtUjaifmRZED_eiUEgtwVhPCsmURvxvl
 """
 
-# Install required packages
-!pip install -q transformers datasets
 
 from transformers import AutoTokenizer, AutoModelForSeq2SeqLM
 from datasets import load_dataset
